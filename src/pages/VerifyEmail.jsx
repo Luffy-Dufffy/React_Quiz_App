@@ -10,7 +10,7 @@ const VerifyEmail = () => {
   const navigate = useNavigate();
 
   const handleEmailVerification = (token) => {
-    verificationMsg = verifyEmail(token);
+    var verificationMsg = verifyEmail(token);
     if (verificationMsg.error) {
       setError(verificationMsg.message);
       setVerified(false);

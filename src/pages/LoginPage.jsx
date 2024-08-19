@@ -1,56 +1,51 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { login } from '../services/auth';
+import InputField from '../components/InputField';
+import PasswordField from '../components/PasswordField';
+import MyButton from '../components/MyButton';
+import useForm from '../hooks/useForm';
+import { BsPerson } from 'react-icons/bs';
+import { CiLock } from 'react-icons/ci';
+import Checkbox from '../components/Checkbox';
 
 const LoginPage = () => {
-    const [formData, setFormData] = useState({
-        username: '',
-        password: ''
-    });
-
     const navigate = useNavigate();
-    const [errors, setErrors] = useState({});
     const [serverErrors, setServerErrors] = useState({});
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [pwdVisible, setPwdVisible] = useState(false);
 
-    const handlePwdVisibleChange = () => {
-        setPwdVisible(!pwdVisible);
+    const validate = (data) => {
+        let errors = {};
+        if (!data.password) errors.password = 'Password is required';
+        else if (data.password.length < 8) errors.password = 'Password must be at least 8 characters long';
+        if (!data.username) errors.username = 'Username is required';
+        return errors;
     };
 
-    const handleFormDataChange = (event) => {
-        const { name, value } = event.target;
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            [name]: value
-        }));
-    };
+    const initialFormValues = { email: '', password1: '', password2: '', username: '' };
+    const { formData, errors, handleInputChange, validateForm, setErrors } = useForm(initialFormValues, validate);
 
-    const validateInputFieldsData = () => {
-        const newErrors = {};
-        if (!formData.username || !formData.username.trim()) {
-            newErrors.username = 'Username is required';
-        }
-        if (!formData.password || !formData.password.trim()) {
-            newErrors.password = 'Password is required';
-        }
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
-    };
+    const handlePwdVisible = () => setPwdVisible(!pwdVisible);
 
     const handleLogin = async (event) => {
         event.preventDefault();
-        const valid = validateInputFieldsData();
+        const valid = validateForm();
 
         if (valid) {
             try {
+                setIsSubmitting(true);
                 const message = await login(formData);
-                if (message.error) {
-                    setServerErrors(message.message);
-                    return;
+                if (message) {
+                    setIsSubmitting(false);
+                    if (message.error) {
+                        setServerErrors(message.message);
+                        return;
+                    }
+                    navigate('/');
                 }
-                navigate('/');
             } catch (error) {
+                setIsSubmitting(false);
                 console.error('Error during login:', error);
                 setServerErrors({ general: 'An error occurred during login. Please try again.' });
             }
@@ -59,45 +54,56 @@ const LoginPage = () => {
 
     return (
         <div className="loginPage w-screen h-screen flex justify-center items-center">
-            <div className="login-wrapper min-w-[340px] bg-white p-10 rounded-xl shadow-2xl select-none">
-                <form className="flex justify-center align-center flex-col" onSubmit={handleLogin}>
-                    <h2 className="text-3xl font-bold text-center mb-5 font-serif">Login</h2>
-
-                    <div className="field username flex flex-col mb-2">
-                        <label htmlFor="username">Username</label>
-                        <input
-                            type="text"
-                            name="username"
+            <div className='drop-shadow-xl shadow-xl p-6 bg-white text-black w-96 rounded-md' disabled={isSubmitting ? true : false}>
+                <h1 className='text-2xl text-center mb-6 font-semibold'>Login</h1>
+                <form onSubmit={handleLogin} className='space-y-3 flex flex-col justify-center'>
+                    <div>
+                        <InputField
+                            label='Username'
+                            type='text'
+                            name='username'
+                            placeholder='Enter your username'
+                            icon={<BsPerson className='text-2xl' />}
                             value={formData.username}
-                            onChange={handleFormDataChange}
-                            className="border-2 rounded-md px-3 py-1"
+                            onChange={handleInputChange}
                         />
-                        {errors.username && <p className="border-l-2 border-red-800 px-2 mt-1 text-red-600 text-xs">{errors.username}</p>}
-                        {serverErrors.username && <p className="border-l-2 border-red-800 px-2 mt-1 text-red-600 text-xs">{serverErrors.username}</p>}
+                        {errors.username && <p className="border-l-2 rounded-sm border-red-800 px-2 mt-1 text-red-600 text-xs">{errors.username}</p>}
+                        {serverErrors.username && <p className="border-l-2 rounded-sm border-red-800 px-2 mt-1 text-red-600 text-xs">{serverErrors.username}</p>}
                     </div>
 
-                    <div className="field password flex flex-col mb-2">
-                        <label htmlFor="password">Password</label>
-                        <div className={`flex justify-center align-center w-full border-2 rounded-md bg-white ${errors.password ? 'border-red-600' : ''}`}>
-                            <input
-                                type={pwdVisible ? "text" : "password"}
-                                name="password"
-                                value={formData.password}
-                                onChange={handleFormDataChange}
-                                className="peer outline-none px-3 py-1 w-[88%] rounded-md"
-                            />
-                            <div className="w-[12%] h-full p-1.5" onClick={handlePwdVisibleChange}>
-                                {pwdVisible ? <FaEyeSlash className="h-full w-full cursor-pointer" /> : <FaEye className="h-full w-full cursor-pointer" />}
-                            </div>
-                        </div>
+                    <div>
+                        <PasswordField
+                            label='Password'
+                            name='password'
+                            placeholder='Enter your password'
+                            icon={<CiLock className='text-2xl' />}
+                            value={formData.password}
+                            onChange={handleInputChange}
+                            showPassword={pwdVisible}
+                        />
                         {errors.password && <p className="border-l-2 rounded-sm border-red-800 px-2 mt-1 text-red-600 text-xs">{errors.password}</p>}
                         {serverErrors.password && <p className="border-l-2 rounded-sm border-red-800 px-2 mt-1 text-red-600 text-xs">{serverErrors.password}</p>}
                     </div>
 
-                    {serverErrors.non_field_errors && serverErrors.non_field_errors.map((value, index) => <p className="border-l-2 rounded-sm border-red-800 px-2 mt-1 text-red-600 text-xs" key={index}>{value}</p>)}
+                    <Checkbox
+                        label='Show Password'
+                        name='pwdToggle'
+                        onChange={handlePwdVisible}
+                    />
 
-                    <button type="submit" className="bg-blue-600 h-10 text-white rounded-md mt-6 hover:bg-blue-500 cursor-pointer mb-4">Login</button>
+                    {serverErrors.non_field_errors && serverErrors.non_field_errors.map((value, index) => (
+                        <p className="border-l-2 rounded-sm border-red-800 px-2 mt-1 text-red-600 text-xs" key={index}>{value}</p>
+                    ))}
+
+                    <MyButton text={isSubmitting ? 'Logging...' : 'Login'} className='w-full rounded-lg' buttonProperties={{ disabled: isSubmitting }} />
+
+                    {serverErrors.general && <p className="border-l-4 rounded-sm border-red-800 px-2 text-red-600 text-sm mt-2">{serverErrors.general}</p>}
+
                 </form>
+                <p className='my-2 mt-8 text-center'>
+                    Don’t have an account?
+                    <span className='text-blue-600 hover:cursor-pointer hover:bg-gray-200 p-2 rounded-lg' onClick={() => navigate('/register')}> Register</span>
+                </p>
             </div>
         </div>
     );

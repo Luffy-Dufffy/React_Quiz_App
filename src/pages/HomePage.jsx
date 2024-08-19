@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { createAttempt } from '../services/quiz';
 
 const HomePage = () => {
-    const navigate = useNavigate(); 
+    const navigate = useNavigate();
 
     const handleStartQuiz = async () => {
         var attempt = await createAttempt();

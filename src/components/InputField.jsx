@@ -10,7 +10,7 @@ export const InputField = ({ type, label, icon, className, onChange, value, plac
     };
 
     return (
-        <div className={`${className} pt-1 flex justify-center items-center border-2 px-2 relative focus-within:border-blue-500 group ${hasValue ? 'border-blue-500' : 'border-black'}`}>
+        <div className={`${className} pt-1 flex justify-center items-center border-2 px-2 relative focus-within:border-blue-500 group ${hasValue ? 'border-blue-500' : 'border-gray-500'}`}>
             {icon && <span className="icon-container">{icon}</span>}
             <input
                 type={type}
@@ -23,7 +23,7 @@ export const InputField = ({ type, label, icon, className, onChange, value, plac
             />
             <label
                 htmlFor={name}
-                className={`absolute pointer-events-none transition-all duration-300 px-2 border-x-2
+                className={`absolute pointer-events-none transition-all duration-300 px-2 border-x-2 rounded-sm
                     ${hasValue
                         ? `scale-[0.7] -top-3 bg-white border-blue-500 ${icon ? 'left-5' : '-left-1'}`
                         : `top-1.5 border-transparent ${icon ? 'left-12' : 'left-4'}`
