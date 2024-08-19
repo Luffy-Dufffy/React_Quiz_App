@@ -1,11 +1,11 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage";
-import LoginPage from "./pages/LoginPage";
-import Register from "./pages/Register";
+import LoginPage from "./pages/authentication/LoginPage";
+import Register from "./pages/authentication/Register";
 import LandingPage from "./pages/LandingPage";
-import VerificationEmailSent from "./pages/VerificationEmailSent";
-import VerifyEmail from "./pages/VerifyEmail";
+import VerificationEmailSent from "./pages/authentication/VerificationEmailSent";
+import VerifyEmail from "./pages/authentication/VerifyEmail";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import PlayQuiz from "./pages/PlayQuiz";
 

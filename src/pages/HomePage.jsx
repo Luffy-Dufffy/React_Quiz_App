@@ -1,25 +1,19 @@
-import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom';
-import { createAttempt } from '../services/quiz';
+import React from 'react'
+import MyButton from '.././components/MyButton'
 
 const HomePage = () => {
-    const navigate = useNavigate();
-
-    const handleStartQuiz = async () => {
-        var attempt = await createAttempt();
-        if (attempt.error) {
-            console.log(attempt.message);
-            return;
-        }
-        console.log(attempt.message);
-        setQuizAttempt(attempt.message);
-        navigate('/play-quiz');
-    }
     return (
-        <div className='flex justify-center items-center w-screen h-screen'>
-            <button className='py-2 px-6 border bg-indigo-500 text-white min-w-20 rounded-md' onClick={handleStartQuiz}>Start Quiz</button>
+        <div className="container h-screen w-screen flex flex-col justify-center items-center">
+            <div className='min-w-96 flex flex-col justify-center items-center space-y-2 p-4 rounded-md '>
+                <MyButton className={'w-full rounded-md shadow-md hover:scale-105 active:scale-95 transition-all duration-200 ease-out'} text={"Play Quiz"} />
+                <MyButton className={'w-full rounded-md shadow-md hover:scale-105 active:scale-95 transition-all duration-200 ease-out'} text={"Add Questions"} />
+                <MyButton className={'w-full rounded-md shadow-md hover:scale-105 active:scale-95 transition-all duration-200 ease-out'} text={"LeaderBoard"} />
+                <MyButton className={'w-full rounded-md shadow-md hover:scale-105 active:scale-95 transition-all duration-200 ease-out'} text={"HighScore"} />
+
+            </div>
         </div>
-    )
+    );
 }
 
-export default HomePage
+
+export default HomePage;

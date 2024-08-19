@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 const MyButton = ({ className, text, onClick, buttonProperties }) => {
     return (
         <button
-            className={`bg-blue-600 px-4 py-2 border-2 border-blue-600 text-white ${className}`}
+            className={`bg-blue-700 px-4 py-2 text-white ${className}`}
             onClick={onClick}
             {...buttonProperties}
         >

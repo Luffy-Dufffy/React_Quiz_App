@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import { verifyEmail } from "../services/auth";
+import { verifyEmail } from "../../services/auth";
 import { useState } from "react";
 
 const VerifyEmail = () => {

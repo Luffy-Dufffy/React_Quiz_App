@@ -23,11 +23,11 @@ export const InputField = ({ type, label, icon, className, onChange, value, plac
             />
             <label
                 htmlFor={name}
-                className={`absolute pointer-events-none transition-all duration-300 px-2 border-x-2 rounded-sm
+                className={`absolute pointer-events-none transition-all duration-300 px-2 border-2 rounded-sm
                     ${hasValue
                         ? `scale-[0.7] -top-3 bg-white border-blue-500 ${icon ? 'left-5' : '-left-1'}`
                         : `top-1.5 border-transparent ${icon ? 'left-12' : 'left-4'}`
-                    } peer-focus:scale-[0.7] peer-focus:-top-3 peer-focus:bg-white peer-focus:border-blue-500 ${icon ? 'peer-focus:left-5' : 'peer-focus:left-4'}`}
+                    } peer-focus:scale-[0.7] peer-focus:-top-3 peer-focus:bg-white peer-focus:border-blue-500 ${icon ? 'peer-focus:left-5' : 'peer-focus:-left-1'}`}
             >
                 {label}
             </label>

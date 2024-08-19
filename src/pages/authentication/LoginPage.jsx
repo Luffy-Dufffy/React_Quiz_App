@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../services/auth';
-import InputField from '../components/InputField';
-import PasswordField from '../components/PasswordField';
-import MyButton from '../components/MyButton';
-import useForm from '../hooks/useForm';
+import { login } from '../../services/auth';
+import InputField from '../../components/InputField';
+import PasswordField from '../../components/PasswordField';
+import MyButton from '../../components/MyButton';
+import useForm from '../../hooks/useForm';
 import { BsPerson } from 'react-icons/bs';
 import { CiLock } from 'react-icons/ci';
-import Checkbox from '../components/Checkbox';
+import Checkbox from '../../components/Checkbox';
 
 const LoginPage = () => {
     const navigate = useNavigate();
@@ -66,6 +66,7 @@ const LoginPage = () => {
                             icon={<BsPerson className='text-2xl' />}
                             value={formData.username}
                             onChange={handleInputChange}
+                            className={'rounded-md'}
                         />
                         {errors.username && <p className="border-l-2 rounded-sm border-red-800 px-2 mt-1 text-red-600 text-xs">{errors.username}</p>}
                         {serverErrors.username && <p className="border-l-2 rounded-sm border-red-800 px-2 mt-1 text-red-600 text-xs">{serverErrors.username}</p>}
@@ -80,28 +81,30 @@ const LoginPage = () => {
                             value={formData.password}
                             onChange={handleInputChange}
                             showPassword={pwdVisible}
+                            className={'rounded-md'}
                         />
                         {errors.password && <p className="border-l-2 rounded-sm border-red-800 px-2 mt-1 text-red-600 text-xs">{errors.password}</p>}
                         {serverErrors.password && <p className="border-l-2 rounded-sm border-red-800 px-2 mt-1 text-red-600 text-xs">{serverErrors.password}</p>}
                     </div>
 
-                    <Checkbox
-                        label='Show Password'
-                        name='pwdToggle'
-                        onChange={handlePwdVisible}
-                    />
-
                     {serverErrors.non_field_errors && serverErrors.non_field_errors.map((value, index) => (
                         <p className="border-l-2 rounded-sm border-red-800 px-2 mt-1 text-red-600 text-xs" key={index}>{value}</p>
                     ))}
 
-                    <MyButton text={isSubmitting ? 'Logging...' : 'Login'} className='w-full rounded-lg' buttonProperties={{ disabled: isSubmitting }} />
+                    <div className='w-full pt-2 flex flex-col gap-2'>
+                        <Checkbox
+                            label='Show Password'
+                            name='pwdToggle'
+                            onChange={handlePwdVisible}
+                        />
+                        <MyButton text={isSubmitting ? 'Logging...' : 'Login'} className='w-full rounded-lg disabled:bg-blue-500' buttonProperties={{ disabled: isSubmitting }} />
 
-                    {serverErrors.general && <p className="border-l-4 rounded-sm border-red-800 px-2 text-red-600 text-sm mt-2">{serverErrors.general}</p>}
+                    </div>
+                    {serverErrors.general && <p className="border-l-2 rounded-sm border-red-800 px-2 text-red-600 text-sm mt-2">{serverErrors.general}</p>}
 
                 </form>
-                <p className='my-2 mt-8 text-center'>
-                    Don’t have an account?
+                <p className='my-2 mt-4 text-center'>
+                    Don't have an account?
                     <span className='text-blue-600 hover:cursor-pointer hover:bg-gray-200 p-2 rounded-lg' onClick={() => navigate('/register')}> Register</span>
                 </p>
             </div>
